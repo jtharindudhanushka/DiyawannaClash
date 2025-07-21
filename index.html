@@ -7,39 +7,53 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0c0a18;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(120, 110, 220, 0.2), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(50, 150, 250, 0.15), transparent 40%);
+            background-image: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(120, 110, 220, 0.25), transparent 30%),
+                              radial-gradient(circle at calc(100% - var(--mouse-x)) calc(100% - var(--mouse-y)), rgba(50, 150, 250, 0.2), transparent 40%);
+            transition: background-position 0.4s ease-out;
         }
-        .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .perspective-container { perspective: 1000px; }
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s ease-out;
+            transform-style: preserve-3d;
+        }
+        .perspective-container:hover .glass-card {
+            transform: rotateY(var(--rotate-y)) rotateX(var(--rotate-x));
         }
         .btn-play {
             background: linear-gradient(45deg, #4f46e5, #818cf8);
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
             text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            background-size: 250% 250%;
+            background-position: 50% 50%;
         }
         .btn-play:hover {
             transform: translateY(-4px) scale(1.05);
             box-shadow: 0 10px 30px rgba(79, 70, 229, 0.6);
+            background-position: 100% 100%;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
         .fade-in-delay-1 { animation-delay: 0.2s; opacity: 0; }
         .fade-in-delay-2 { animation-delay: 0.4s; opacity: 0; }
         .fade-in-delay-3 { animation-delay: 0.6s; opacity: 0; }
@@ -48,31 +62,71 @@
 </head>
 <body class="text-gray-200 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <main class="glass-card rounded-2xl w-full max-w-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
-        <div class="mb-6 fade-in">
-            <img src="assets/logo.png" alt="Diyawanna Clash Logo" class="max-w-[280px] sm:max-w-xs md:max-w-sm mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/400x200/ffffff/000000?text=Logo+Not+Found';">
-        </div>
-        <div class="max-w-lg mx-auto mb-10 px-4 fade-in fade-in-delay-1">
-            <p class="text-gray-400 text-xs md:text-sm text-center italic">
-                Disclaimer: This is a satirical game created for entertainment. All characters and events are fictional. Please enjoy responsibly.
-            </p>
-        </div>
-        <div class="text-center mb-10 fade-in fade-in-delay-2">
-            <a href="game.html" 
-               class="btn-play inline-block text-white font-orbitron font-bold py-4 px-16 rounded-full text-2xl uppercase tracking-widest">
-                Play
-            </a>
-        </div>
-        <div class="text-center fade-in fade-in-delay-3">
-            <h3 class="font-orbitron text-lg text-gray-300 mb-2 tracking-wider">CREDITS</h3>
-            <p class="text-gray-500 text-sm">Game Design & Development: Tharindu, Subanya, Gajanan, Surabini</p>
-            <p class="text-gray-500 text-sm">Music: YouTube</p>
-        </div>
-    </main>
+    <audio id="background-audio" loop autoplay>
+        <source src="assets/Audio/index.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="perspective-container w-full max-w-2xl">
+        <main class="glass-card rounded-2xl w-full p-6 sm:p-8 md:p-12 shadow-2xl">
+            <div class="mb-6 fade-in" style="animation: fadeIn 0.8s ease-out forwards, float 6s ease-in-out infinite;">
+                <img src="assets/logo.png" alt="Diyawanna Clash Logo" class="max-w-[280px] sm:max-w-xs md:max-w-sm mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/400x200/ffffff/000000?text=Logo+Not+Found';">
+            </div>
+            <div class="max-w-lg mx-auto mb-10 px-4 fade-in fade-in-delay-1">
+                <p class="text-gray-400 text-xs md:text-sm text-center italic">
+                    Disclaimer: This is a satirical game created for entertainment. All characters and events are fictional. Please enjoy responsibly.
+                </p>
+            </div>
+            <div class="text-center mb-10 fade-in fade-in-delay-2">
+                <a href="game.html" class="btn-play inline-block text-white font-orbitron font-bold py-4 px-16 rounded-full text-2xl uppercase tracking-widest">
+                    Play
+                </a>
+            </div>
+            <div class="text-center fade-in fade-in-delay-3">
+                <h3 class="font-orbitron text-lg text-gray-300 mb-2 tracking-wider">CREDITS</h3>
+                <p class="text-gray-500 text-sm transition-colors hover:text-gray-300">Game Design & Development: Tharindu, Subanya, Gajanan, Surabini</p>
+                <p class="text-gray-500 text-sm transition-colors hover:text-gray-300">Music: In-house</p>
+            </div>
+        </main>
+    </div>
     <footer class="w-full text-center p-4 mt-auto fade-in fade-in-delay-4">
         <p class="text-gray-600 text-xs">
-            &copy; 2025 Diyawanna Clash. A satirical game by the people, for the people.
+            © 2025 Diyawanna Clash. A satirical game by the people, for the people.
         </p>
     </footer>
+
+    <script>
+        // --- MOUSE INTERACTION JAVASCRIPT ---
+        const body = document.body;
+        const cardContainer = document.querySelector('.perspective-container');
+        body.addEventListener('mousemove', e => {
+            const { clientX, clientY } = e;
+            const x = Math.round((clientX / window.innerWidth) * 100);
+            const y = Math.round((clientY / window.innerHeight) * 100);
+            body.style.setProperty('--mouse-x', `${x}%`);
+            body.style.setProperty('--mouse-y', `${y}%`);
+        });
+        cardContainer.addEventListener('mousemove', e => {
+            const rect = cardContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            cardContainer.style.setProperty('--rotate-x', `${rotateX}deg`);
+            cardContainer.style.setProperty('--rotate-y', `${rotateY}deg`);
+        });
+        cardContainer.addEventListener('mouseleave', () => {
+            cardContainer.style.setProperty('--rotate-x', '0deg');
+            cardContainer.style.setProperty('--rotate-y', '0deg');
+        });
+
+        // Optional: You can control the audio volume with JavaScript if you want
+        const audio = document.getElementById('background-audio');
+        if (audio) {
+            audio.volume = 0.5; // Set volume to 50%
+        }
+    </script>
 </body>
 </html>
