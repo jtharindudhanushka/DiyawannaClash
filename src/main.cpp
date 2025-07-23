@@ -46,8 +46,10 @@ struct ScrollingLayer {
 // --- Global Variables ---
 const int screenWidth = 1280;
 const int screenHeight = 720;
+// With the above lines we can easily change the screen resolutions
 
 // --- Scaling Constants ---
+// We faced a problem of scales of assets we used. So we used a global variable to control the scales of each asset more easily
 const float playerScale = 0.2f;
 const float enemyScale = 0.18f;
 const float lifeIconScale = 0.2f;
@@ -59,6 +61,7 @@ float enemySpawnTimer = 0.0f;
 float shootCooldown = 0.0f;
 
 // --- Difficulty Scaling Variables ---
+// When the time passes this will gradually increase the games difiiculty withina threshhold
 float gameTime = 0.0f;
 float difficultyTimer = 0.0f;
 float minSpawnTime = 1.5f;
@@ -87,8 +90,10 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "Diyawanna Clash");
     InitAudioDevice();
     SetTargetFPS(60);
+    // The game is intended to run at 60fps to feel more smooth
 
     // --- Asset Loading ---
+    // To make it easy for our group to load assets we loaded them at once
     menuScreenTexture = LoadTexture("assets/menuscreen.png");
     lifeTexture = LoadTexture("assets/life.png");
     gameOverTexture = LoadTexture("assets/gameover.png");
@@ -104,6 +109,7 @@ int main(void) {
     explosionSound = LoadSound("assets/Audio/enemy_explosion.ogg");
     playerDieSound = LoadSound("assets/Audio/player_die.ogg");
 
+    //The explosion after each enemy dies and parallax background is handled by using seperate png layers.
     for (int i = 0; i < 11; i++) {
         explosionFrames[i] = LoadTexture(TextFormat("assets/Explosion/frame%04i.png", i));
     }
